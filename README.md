@@ -66,7 +66,7 @@
 </head>
 <body>
   <header>
-    <h1>Your Website Name</h1>
+    <h1>Introduction to Quantitative Biology - Final Project Website</h1>
   </header>
 
   <nav>
@@ -83,7 +83,7 @@
   <div class="container">
     <h2>About Our Research</h2>
     <p>
-      Our lab investigates innovative methods to understand, model, and therapeutically target the
+      Our group investigates innovative methods to understand, model, and therapeutically target the
       blood–brain barrier (BBB). The BBB is a highly selective biological interface that regulates
       molecular and cellular exchange between the bloodstream and the central nervous system.
       While essential for brain protection, it also presents a major obstacle for delivering
