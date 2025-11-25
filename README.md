@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Computational Modeling of Drug Transport Across the Blood Brain Barrier</title>
+  <title>Your Website</title>
   <style>
     body {
       margin: 0;
@@ -38,15 +38,10 @@
     }
 
     .hero {
-      height: 60vh;
-      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://picsum.photos/1600/900');
-      background-size: cover;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
+      padding: 80px 20px;
+      background: #e9ecef;
+      color: #1a1a1a;
       text-align: center;
-      padding: 20px;
     }
 
     .hero h1 {
@@ -82,7 +77,7 @@
   </nav>
 
   <section class="hero">
-    <h1>Welcome to My Website</h1>
+    <h1>Welcome to Our Research on the Blood–Brain Barrier</h1>
   </section>
 
   <div class="container">
