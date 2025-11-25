@@ -1,4 +1,3 @@
-# BBB.github.io
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -87,17 +86,41 @@
   </section>
 
   <div class="container">
-    <h2>About Me</h2>
+    <h2>About Our Research</h2>
     <p>
-      This is a clean and simple template you can use for your GitHub Pages site.
-      Replace this text with your own content.
+      Our lab investigates innovative methods to understand, model, and therapeutically target the
+      blood–brain barrier (BBB). The BBB is a highly selective biological interface that regulates
+      molecular and cellular exchange between the bloodstream and the central nervous system.
+      While essential for brain protection, it also presents a major obstacle for delivering
+      life-saving neurological therapies.
     </p>
 
-    <h2>Projects</h2>
-    <p>Showcase your work here.</p>
+    <h2>Our Focus Areas</h2>
+    <ul>
+      <li><strong>Barrier Structure & Function:</strong> Studying tight junction proteins,
+      endothelial cell behavior, and molecular signaling that maintain BBB integrity.</li>
+      <li><strong>Drug Delivery Across the BBB:</strong> Engineering nanoparticles, polymer
+      coatings, and carrier systems capable of penetrating or bypassing the barrier.</li>
+      <li><strong>In Vitro BBB Models:</strong> Developing physiologically relevant BBB-on-chip
+      systems to test therapeutic transport and predict clinical outcomes.</li>
+      <li><strong>Neuroinflammation & Disease:</strong> Investigating BBB disruption in
+      conditions such as Alzheimer's disease, stroke, and neurodegenerative disorders.</li>
+    </ul>
+
+    <h2>Current Projects</h2>
+    <p>
+      Our team is currently developing stimuli-responsive polymer brush coatings to enhance the
+      transport of ophthalmic therapeutics and exploring how nanoparticle size, charge, and
+      hydrophobicity influence their ability to cross BBB-like interfaces.
+      We integrate material science, molecular biology, and advanced imaging to design systems
+      capable of delivering drugs where traditional methods fail.
+    </p>
 
     <h2>Contact</h2>
-    <p>Put links or contact info here.</p>
+    <p>
+      Interested in collaborating, learning more, or joining the team? Reach out to us via email or
+      connect through our institutional research page.
+    </p>
   </div>
 
   <footer>
