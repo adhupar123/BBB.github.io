@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>BBB Diffusion — Minimal Simulator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body { font-family: Arial, sans-serif; background:#f5f7fb; padding:20px; }
+.card{background:white;padding:16px;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.1);max-width:900px;margin:auto;}
+#simCanvas{width:100%;height:380px;background:white;border-radius:10px;border:1px solid #ccd;}
+label{font-weight:bold;}
+input[type=range]{width:100%;}
+.small{font-size:14px;color:#555;}
+.btn{padding:8px 14px;background:#0b5fff;color:white;border-radius:8px;text-decoration:none;margin-right:6px;}
+</style>
+</head>
+
+<body>
+<div class="card">
+  <h2>BBB Diffusion Simulator (Simple Version)</h2>
+  <p class="small">Sliders: radius, LogBB, charge. Diffusion coefficient & permeability are fixed for clarity.</p>
+
+  <canvas id="simCanvas"></canvas>
+
+  <div style="margin-top:16px;">
+    <label>Particle radius (nm): <span id="radLabel">40</span></label>
+    <input id="radSlider" type="range" min="5" max="150" value="40">
+
+    <label>LogBB value: <span id="logbbLabel">-1.0</span></label>
+    <input id="logbb" type="range" min="-1.5" max="1.0" step="0.1" value="-1.0">
+
+    <label>Charge:</label>
+    <select id="charge">
+      <option value="neutral">Neutral</option>
+      <option value="positive">Positive</option>
+      <option value="negative">Negative</option>
+    </select>
+
+    <br><br>
+
+    <a id="startBtn" class="btn">Start</a>
+    <a id="resetBtn" class="btn" style="background:#fff;color:#0b5fff;border:2px solid #0b5fff;">Reset</a>
+
+    <p class="small">Crossed: <span id="crossed">0</span> / <span id="total">0</span></p>
+  </div>
+</div>
+
+<script>
+// ---------------- SETUP ---------------- //
+const canvas = document.getElementById("simCanvas");
+const ctx = canvas.getContext("2d");
+canvas.width = canvas.clientWidth;
+canvas.height = canvas.clientHeight;
+
+let particles = [];
+let running = false;
+let crossed = 0;
+
+const FIXED_DIFFUSION = 5;     // fixed D
+const FIXED_PERM = 0.05;       // fixed permeability
+const NUM_PARTICLES = 400;     // fixed particle count
+
+// Helpers
+function rand(a,b){return a + Math.random()*(b-a);}
+
+// ---------------- PARTICLES ---------------- //
+function initParticles(){
+  particles = [];
+  crossed = 0;
+
+  const r = +radSlider.value / 20;
+
+  for(let i=0;i<NUM_PARTICLES;i++){
+    particles.push({
+      x: rand(10, canvas.width/2 - 30),
+      y: rand(10, canvas.height - 10),
+      crossed:false,
+      r: r
+    });
+  }
+
+  crossedEl.textContent = crossed;
+  totalEl.textContent = NUM_PARTICLES;
+}
+
+// ---------------- DRAW BACKGROUND ---------------- //
+function drawBackground(){
+  ctx.fillStyle = "white";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  // Barrier
+  ctx.fillStyle = "#0b5fff";
+  ctx.fillRect(canvas.width/2 - 2, 0, 4, canvas.height);
+}
+
+// ---------------- STEP FUNCTION ---------------- //
+function step(dt){
+  const chargeMode = charge.value;
+  const logBB = parseFloat(document.getElementById("logbb").value);
+
+  for(const p of particles){
+    // Basic diffusion
+    p.x += rand(-1,1) * FIXED_DIFFUSION * dt * 20;
+    p.y += rand(-1,1) * FIXED_DIFFUSION * dt * 20;
+
+    // Charge drift
+    if(chargeMode === "positive")   p.x += 0.4;
+    if(chargeMode === "negative")   p.x -= 0.4;
+
+    // Bounds
+    if(p.y<5) p.y=5;
+    if(p.y>canvas.height-5) p.y=canvas.height-5;
+
+    // Barrier
+    const bx = canvas.width/2;
+    if(!p.crossed && p.x > bx - 5){
+      if(Math.random() < FIXED_PERM){
+        p.crossed = true;
+        crossed++;
+      } else {
+        p.x = bx - 10;
+      }
+    }
+  }
+
+  crossedEl.textContent = crossed;
+}
+
+// ---------------- RENDER PARTICLES ---------------- //
+function render(){
+  drawBackground();
+  
+  const logBB = parseFloat(document.getElementById("logbb").value);
+
+  for(const p of particles){
+    // Color based on LogBB
+    // Blue = low LogBB, Red = high LogBB
+    const t = (logBB + 1.5) / 2.5; // normalize -1.5 to 1.0 range
+    const red = Math.floor(255 * t);
+    const blue = Math.floor(255 * (1 - t));
+
+    ctx.beginPath();
+    ctx.fillStyle = p.crossed ? "rgba(11,95,255,1)" : `rgb(${red}, 50, ${blue})`;
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+    ctx.fill();
+  }
+}
+
+// ---------------- ANIMATION LOOP ---------------- //
+let last = null;
+function loop(t){
+  if(!running) return;
+  if(!last) last = t;
+  const dt = (t-last)/1000;
+  last = t;
+
+  step(dt);
+  render();
+  requestAnimationFrame(loop);
+}
+
+// ---------------- UI HANDLERS ---------------- //
+const radSlider = document.getElementById("radSlider");
+const logbbSlider = document.getElementById("logbb");
+const charge = document.getElementById("charge");
+
+const radLabel = document.getElementById("radLabel");
+const logbbLabel = document.getElementById("logbbLabel");
+
+const crossedEl = document.getElementById("crossed");
+const totalEl = document.getElementById("total");
+
+// slider labels
+radSlider.oninput = e => radLabel.textContent = e.target.value;
+logbbSlider.oninput = e => logbbLabel.textContent = e.target.value;
+
+// buttons
+document.getElementById("startBtn").onclick = ()=>{
+  running = true;
+  last = null;
+  requestAnimationFrame(loop);
+};
+
+document.getElementById("resetBtn").onclick = ()=>{
+  running = false;
+  initParticles();
+  render();
+};
+
+// initial
+initParticles();
+render();
+</script>
+
+</body>
+</html>
